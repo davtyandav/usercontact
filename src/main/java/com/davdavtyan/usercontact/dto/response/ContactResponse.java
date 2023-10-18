@@ -12,6 +12,6 @@ import java.util.List;
 public class ContactResponse {
 
     private Long id;
-    private String email;
+    private List<String> emails;
     private List<String> phones;
 }
