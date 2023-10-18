@@ -9,9 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Contact {
+public class ContactRequest {
 
     private Long id;
-    private String email;
+    private List<String> emails;
     private List<String> phones;
 }

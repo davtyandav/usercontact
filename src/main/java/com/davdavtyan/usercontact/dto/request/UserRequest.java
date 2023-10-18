@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+public class UserRequest {
 
     private Long id;
     private String name;
-    private Contact contact;
+    private ContactRequest contact;
 }

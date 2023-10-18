@@ -1,5 +1,13 @@
 package com.davdavtyan.usercontact.contreoller;
 
+import com.davdavtyan.usercontact.dto.request.ContactRequest;
+import com.davdavtyan.usercontact.dto.response.ContactResponse;
+import com.davdavtyan.usercontact.service.ContactService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/contacts")
 public class ContactController {
@@ -11,14 +19,12 @@ public class ContactController {
     }
 
     @GetMapping("/client/{clientId}/type/{type}")
-    public List<Contact> getContactsByClientAndType(@PathVariable Long clientId, @PathVariable String type) {
-        Client client = new Client();
-        client.setId(clientId);
-        return contactService.getContactsByClientAndType(client, type);
+    public List<ContactResponse> getContactsByClientAndType(@PathVariable Long clientId, @PathVariable String type) {
+        return contactService.getContactsByClientAndType(clientId, type);
     }
 
     @PostMapping
-    public Contact addNewContact(@RequestBody Contact contact) {
+    public ContactResponse addNewContact(@RequestBody ContactRequest contact) {
         return contactService.addNewContact(contact);
     }
 }

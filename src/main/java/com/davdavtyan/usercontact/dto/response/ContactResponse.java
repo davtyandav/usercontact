@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Contact {
+public class ContactResponse {
 
     private Long id;
     private String email;
