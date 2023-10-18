@@ -5,6 +5,8 @@ import com.davdavtyan.usercontact.dto.response.ContactResponse;
 import com.davdavtyan.usercontact.entity.Contact;
 import com.davdavtyan.usercontact.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,20 +23,22 @@ public class ContactController {
     }
 
     @GetMapping("/user/{userId}/type/{type}")
-    public List<ContactResponse> getContactsByUserIdAndType(@PathVariable Long userId, @PathVariable String type) {
-        return contactService.getContactsByUserIdAndType(userId, type).stream().map(this::convertByResponse).collect(Collectors.toList());
+    public ResponseEntity<List<ContactResponse>> getContactsByUserIdAndType(@PathVariable Long userId, @PathVariable String type) {
+        List<ContactResponse> contacts = contactService.getContactsByUserIdAndType(userId, type).stream().map(this::convertByResponse).collect(Collectors.toList());
+        return new ResponseEntity<>(contacts, HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}")
-    public List<ContactResponse> getContactsByUserId(@PathVariable Long userId) {
-        return contactService.getContactsByUserId(userId).stream().map(this::convertByResponse).collect(Collectors.toList());
+    public ResponseEntity<List<ContactResponse>> getContactsByUserId(@PathVariable Long userId) {
+        List<ContactResponse> contacts = contactService.getContactsByUserId(userId).stream().map(this::convertByResponse).collect(Collectors.toList());
+        return new ResponseEntity<>(contacts, HttpStatus.OK);
     }
 
     @PostMapping("/user/{userId}")
-    public ContactResponse addContact(@PathVariable Long userId, @RequestBody ContactRequest contactRequest) {
-
+    public ResponseEntity<ContactResponse> addContact(@PathVariable Long userId, @RequestBody ContactRequest contactRequest) {
         Contact contact = convertByEntity(contactRequest);
-        return convertByResponse(contactService.addContactByUser(userId, contact));
+        ContactResponse contactResponse = convertByResponse(contactService.addContactByUser(userId, contact));
+        return new ResponseEntity<>(contactResponse, HttpStatus.OK);
     }
 
     private ContactResponse convertByResponse(Contact contact) {
