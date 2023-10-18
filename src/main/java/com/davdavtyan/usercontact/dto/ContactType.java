@@ -1,2 +1,5 @@
-package com.davdavtyan.usercontact.dto;public enum ContactType {
+package com.davdavtyan.usercontact.dto;
+
+public enum ContactType {
+    PHONE, EMAIL
 }

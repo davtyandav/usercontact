@@ -2,24 +2,29 @@ package com.davdavtyan.usercontact.service;
 
 import com.davdavtyan.usercontact.dto.request.UserRequest;
 import com.davdavtyan.usercontact.dto.responce.UserResponse;
+import com.davdavtyan.usercontact.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
+    private UserRepository userRepository;
+
     @Override
-    public List<UserResponse> getAllUsers() {
+    public List<User> getAllUsers() {
         return null;
     }
 
     @Override
-    public UserResponse addUser(UserRequest user) {
-        return null;
+    public User addUser(User user) {
+
+        return userRepository.save(user);
     }
 
     @Override
-    public UserResponse getUserById(Long id) {
+    public User getUserById(Long id) {
         return null;
     }
 }

@@ -1,16 +1,15 @@
 package com.davdavtyan.usercontact.service;
 
-import com.davdavtyan.usercontact.dto.request.UserRequest;
+import com.davdavtyan.usercontact.entity.User;
 import org.springframework.stereotype.Service;
-import com.davdavtyan.usercontact.dto.responce.UserResponse;
 
 import java.util.List;
 
 @Service
 public interface UserService {
-    List<UserResponse> getAllUsers();
+    List<User> getAllUsers();
 
-    UserResponse addUser(UserRequest user);
+    User addUser(User user);
 
-    UserResponse getUserById(Long id);
+    User getUserById(Long id);
 }

@@ -1,7 +1,5 @@
 package com.davdavtyan.usercontact.service;
 
-import com.davdavtyan.usercontact.dto.request.ContactRequest;
-import com.davdavtyan.usercontact.dto.response.ContactResponse;
 import com.davdavtyan.usercontact.entity.Contact;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +15,20 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<ContactResponse> getContactsByClientAndType(Long clientId, String type) {
-//        return convert(contactRepository.findByUserAndIdAndContactType(clientId, type));
+    public List<Contact> getContactsByUserIdAndType(Long userId, String type) {
 
         return null;
     }
 
     @Override
-    public ContactResponse addNewContact(ContactRequest contact) {
+    public List<Contact> getContactsByUserId(Long userId) {
+
         return null;
     }
 
-    private List<ContactResponse> convert(List<Contact> contacts) {
+    @Override
+    public Contact addContactByUser(Long userId, Contact contact) {
         return null;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.davdavtyan.usercontact.dto.responce;
+package com.davdavtyan.usercontact.dto.response;
 
 import com.davdavtyan.usercontact.dto.response.ContactResponse;
 import lombok.Getter;
