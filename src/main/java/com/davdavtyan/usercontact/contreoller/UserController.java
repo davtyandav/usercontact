@@ -1,9 +1,9 @@
 package com.davdavtyan.usercontact.contreoller;
 
 import com.davdavtyan.usercontact.dto.request.UserRequest;
+import com.davdavtyan.usercontact.dto.response.UserResponse;
 import com.davdavtyan.usercontact.entity.User;
 import com.davdavtyan.usercontact.service.UserService;
-import com.davdavtyan.usercontact.dto.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

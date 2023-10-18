@@ -30,7 +30,7 @@ public class ContactController {
         return contactService.getContactsByUserId(userId).stream().map(this::convertByResponse).collect(Collectors.toList());
     }
 
-    @GetMapping("/user/{userId}")
+    @PostMapping("/user/{userId}")
     public ContactResponse addContact(@PathVariable Long userId, @RequestBody ContactRequest contactRequest) {
 
         Contact contact = convertByEntity(contactRequest);
