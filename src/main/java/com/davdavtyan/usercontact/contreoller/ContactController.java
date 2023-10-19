@@ -75,7 +75,6 @@ public class ContactController {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
         userResponse.setName(user.getName());
-
         return userResponse;
     }
 }
