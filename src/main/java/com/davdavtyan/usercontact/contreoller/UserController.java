@@ -1,6 +1,7 @@
 package com.davdavtyan.usercontact.contreoller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.davdavtyan.usercontact.dto.request.ContactRequest;
@@ -47,24 +48,28 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        UserResponse userResponse = convertByResponse(userService.getUserById(id));
-        return new ResponseEntity<>(userResponse, HttpStatus.OK);
+        return userService.getUserById(id)
+                .map(this::convertByResponse)
+                .map(userResponse -> new ResponseEntity<>(userResponse, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     private UserResponse convertByResponse(User user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
         userResponse.setName(user.getName());
-        userResponse.setContacts(
-                user.getContacts().stream().map(this::convertByContactResponse).collect(Collectors.toList()));
+        userResponse.setContacts(getContacts(user));
         return userResponse;
+    }
+
+    private List<ContactResponse> getContacts(User user) {
+        return user.getContacts().stream().map(this::convertByContactResponse).collect(Collectors.toList());
     }
 
     private User convertByUser(UserRequest userrequest) {
         User user = new User();
         user.setName(userrequest.getName());
         user.setContacts(userrequest.getContacts().stream().map(this::convertByContact).collect(Collectors.toList()));
-
         return user;
     }
 

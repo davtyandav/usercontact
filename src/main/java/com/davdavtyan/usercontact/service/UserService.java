@@ -1,6 +1,7 @@
 package com.davdavtyan.usercontact.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.davdavtyan.usercontact.entity.User;
 import org.springframework.stereotype.Service;
@@ -11,5 +12,5 @@ public interface UserService {
 
     User addUser(User user);
 
-    User getUserById(Long id);
+    Optional<User> getUserById(Long id);
 }

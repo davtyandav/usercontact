@@ -35,16 +35,16 @@ public class ContactController {
     public ResponseEntity<List<ContactResponse>> getContactsByUserIdAndType(@PathVariable Long userId,
                                                                             @PathVariable ContactType type) {
         List<ContactResponse> contacts =
-            contactService.getContactsByUserIdAndType(userId, type).stream().map(this::convertByContactResponse)
-                .collect(Collectors.toList());
+                contactService.getContactsByUserIdAndType(userId, type).stream().map(this::convertByContactResponse)
+                        .collect(Collectors.toList());
         return new ResponseEntity<>(contacts, HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ContactResponse>> getContactsByUserId(@PathVariable Long userId) {
         List<ContactResponse> contacts =
-            contactService.getContactsByUserId(userId).stream().map(this::convertByContactResponse)
-                .collect(Collectors.toList());
+                contactService.getContactsByUserId(userId).stream().map(this::convertByContactResponse)
+                        .collect(Collectors.toList());
         return new ResponseEntity<>(contacts, HttpStatus.OK);
     }
 
@@ -69,12 +69,5 @@ public class ContactController {
         contactResponse.setContactType(contact.getContactType());
         contactResponse.setName(contact.getName());
         return contactResponse;
-    }
-
-    private UserResponse convertByResponse(User user) {
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
-        return userResponse;
     }
 }

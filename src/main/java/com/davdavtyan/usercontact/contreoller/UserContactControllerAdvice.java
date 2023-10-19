@@ -21,16 +21,5 @@ public class UserContactControllerAdvice {
         return ResponseEntity.status(exceptionDto.getStatus()).body(exceptionDto);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleGlobalException(Exception ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
-    }
-
-    @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
-    public ResponseEntity<?> handleBindingErrors(MethodArgumentNotValidException e) {
-        return new ResponseEntity<>(e.getBindingResult().getFieldErrors().stream()
-                                        .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)),
-                                    HttpStatus.BAD_REQUEST);
-    }
 
 }

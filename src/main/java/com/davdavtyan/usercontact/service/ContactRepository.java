@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface ContactRepository extends JpaRepository<Contact, Long> {
     @Query("SELECT c FROM Contact c WHERE c.user.id = :userId")
     List<Contact> findByUserId(@Param("userId") Long userId);
-
-    List<Contact> findContactsByUser_IdAndContactType(Long userId, ContactType type);
+    @Query("SELECT c FROM Contact c WHERE c.user.id = :userId and c.contactType=:type")
+    List<Contact> getContactsByUserAndContactType(Long userId, ContactType type);
 }
