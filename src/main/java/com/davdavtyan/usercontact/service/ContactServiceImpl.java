@@ -1,34 +1,38 @@
 package com.davdavtyan.usercontact.service;
 
-import com.davdavtyan.usercontact.entity.Contact;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+
+import com.davdavtyan.usercontact.dto.ContactType;
+import com.davdavtyan.usercontact.entity.Contact;
+import com.davdavtyan.usercontact.entity.User;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
+    private final UserRepository userRepository;
 
-    public ContactServiceImpl(ContactRepository contactRepository) {
+    public ContactServiceImpl(ContactRepository contactRepository, UserRepository userRepository) {
         this.contactRepository = contactRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public List<Contact> getContactsByUserIdAndType(Long userId, String type) {
-
-        return null;
+    public List<Contact> getContactsByUserIdAndType(Long userId, ContactType type) {
+        return contactRepository.findContactsByUser_IdAndContactType(userId, type);
     }
 
     @Override
     public List<Contact> getContactsByUserId(Long userId) {
-
-        return null;
+        return contactRepository.findByUserId(userId);
     }
 
     @Override
     public Contact addContactByUser(Long userId, Contact contact) {
-        return null;
+        User byId = userRepository.findById(userId).get();
+        contact.setUser(byId);
+        return contactRepository.save(contact);
     }
 
 }

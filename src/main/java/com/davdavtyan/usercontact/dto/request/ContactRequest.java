@@ -1,17 +1,20 @@
 package com.davdavtyan.usercontact.dto.request;
 
+import com.davdavtyan.usercontact.dto.ContactType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class ContactRequest {
 
+    @JsonIgnore
     private Long id;
-    private List<String> emails;
-    private List<String> phones;
+    private String name;
+    private ContactType contactType;
+    private Long userId;
+
 }

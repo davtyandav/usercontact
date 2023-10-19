@@ -1,5 +1,7 @@
 package com.davdavtyan.usercontact.contreoller;
 
+import java.util.stream.Collectors;
+
 import com.davdavtyan.usercontact.dto.ExceptionDto;
 import com.davdavtyan.usercontact.exception.ApiException;
 import org.springframework.http.HttpStatus;
@@ -9,8 +11,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class UserContactControllerAdvice {
@@ -29,7 +29,8 @@ public class UserContactControllerAdvice {
     @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
     public ResponseEntity<?> handleBindingErrors(MethodArgumentNotValidException e) {
         return new ResponseEntity<>(e.getBindingResult().getFieldErrors().stream()
-                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)), HttpStatus.BAD_REQUEST);
+                                        .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)),
+                                    HttpStatus.BAD_REQUEST);
     }
 
 }

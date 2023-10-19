@@ -1,9 +1,9 @@
 package com.davdavtyan.usercontact.service;
 
+import java.util.List;
+
 import com.davdavtyan.usercontact.entity.User;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public interface UserService {

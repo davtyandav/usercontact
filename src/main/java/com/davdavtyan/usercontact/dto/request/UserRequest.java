@@ -1,5 +1,7 @@
 package com.davdavtyan.usercontact.dto.request;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserRequest {
 
-    private Long id;
     private String name;
-    private ContactRequest contact;
+    private List<ContactRequest> contacts;
 }

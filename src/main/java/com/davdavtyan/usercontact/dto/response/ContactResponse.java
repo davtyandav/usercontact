@@ -1,10 +1,9 @@
 package com.davdavtyan.usercontact.dto.response;
 
+import com.davdavtyan.usercontact.dto.ContactType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -12,6 +11,7 @@ import java.util.List;
 public class ContactResponse {
 
     private Long id;
-    private List<String> emails;
-    private List<String> phones;
+    private String name;
+    private ContactType contactType;
+    private UserResponse userResponse;
 }
