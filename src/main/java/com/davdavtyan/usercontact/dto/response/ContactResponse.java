@@ -13,5 +13,4 @@ public class ContactResponse {
     private Long id;
     private String name;
     private ContactType contactType;
-    private UserResponse userResponse;
 }

@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ContactRequest {
 
-    @JsonIgnore
     private Long id;
     private String name;
     private ContactType contactType;

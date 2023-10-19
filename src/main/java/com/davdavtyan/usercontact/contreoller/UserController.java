@@ -34,7 +34,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> users = userService.getAllUsers().stream()
-            .map(this::convertByResponse).collect(Collectors.toList());
+                .map(this::convertByResponse).collect(Collectors.toList());
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -56,8 +56,7 @@ public class UserController {
         userResponse.setId(user.getId());
         userResponse.setName(user.getName());
         userResponse.setContacts(
-            user.getContacts().stream().map(this::convertByContactResponse).collect(Collectors.toList()));
-
+                user.getContacts().stream().map(this::convertByContactResponse).collect(Collectors.toList()));
         return userResponse;
     }
 
