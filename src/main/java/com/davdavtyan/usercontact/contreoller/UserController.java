@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.davdavtyan.usercontact.dto.ValidationDto;
 import com.davdavtyan.usercontact.dto.request.ContactRequest;
 import com.davdavtyan.usercontact.dto.request.UserRequest;
 import com.davdavtyan.usercontact.dto.response.ContactResponse;
@@ -11,6 +12,7 @@ import com.davdavtyan.usercontact.dto.response.UserResponse;
 import com.davdavtyan.usercontact.entity.Contact;
 import com.davdavtyan.usercontact.entity.User;
 import com.davdavtyan.usercontact.service.UserService;
+import com.davdavtyan.usercontact.util.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +42,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest userrequest) {
-        User user = convertByUser(userrequest);
-        UserResponse userResponse = convertByResponse(userService.addUser(user));
-        return new ResponseEntity<>(userResponse, HttpStatus.OK);
+    public ResponseEntity<?> addUser(@RequestBody UserRequest userRequest) {
+        ValidationDto validationDto = ValidationUtil.validateContacts(userRequest.getContacts());
+
+        if (validationDto.isValid()) {
+            User user = convertByUser(userRequest);
+            UserResponse userResponse = convertByResponse(userService.addUser(user));
+            return ResponseEntity.ok(userResponse);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(validationDto.getMessage());
+        }
     }
 
     @GetMapping("/{id}")

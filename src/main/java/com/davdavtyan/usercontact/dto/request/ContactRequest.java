@@ -1,7 +1,6 @@
 package com.davdavtyan.usercontact.dto.request;
 
 import com.davdavtyan.usercontact.dto.ContactType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,5 +14,4 @@ public class ContactRequest {
     private String name;
     private ContactType contactType;
     private Long userId;
-
 }
