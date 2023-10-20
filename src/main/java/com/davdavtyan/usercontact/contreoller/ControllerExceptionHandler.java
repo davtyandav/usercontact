@@ -1,5 +1,7 @@
 package com.davdavtyan.usercontact.contreoller;
 
+import java.util.List;
+
 import com.davdavtyan.usercontact.exception.ApiError;
 import com.davdavtyan.usercontact.exception.ApiError.ApiErrorDetails;
 import org.springframework.http.HttpStatus;
@@ -9,8 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.List;
-
 @ControllerAdvice
 public class ControllerExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -18,8 +18,8 @@ public class ControllerExceptionHandler {
         List<FieldError> fieldErrors = e.getFieldErrors();
 
         List<ApiErrorDetails> details = fieldErrors.stream()
-                .map(error -> new ApiErrorDetails(error.getCode(), error.getField(), error.getDefaultMessage()))
-                .toList();
+            .map(error -> new ApiErrorDetails(error.getCode(), error.getField(), error.getDefaultMessage()))
+            .toList();
 
         var apiError = new ApiError("Validation failed", details);
 

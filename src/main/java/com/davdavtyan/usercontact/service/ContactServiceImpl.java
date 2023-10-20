@@ -31,7 +31,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact addContactToUser(Long userId, Contact contact) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User by id %S not found".formatted(userId)));
+            .orElseThrow(() -> new NoSuchElementException("User by id %S not found".formatted(userId)));
 
         contact.setUser(user);
         return contactRepository.save(contact);

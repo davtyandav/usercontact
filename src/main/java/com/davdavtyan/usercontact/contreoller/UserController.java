@@ -34,21 +34,21 @@ public class UserController {
     @GetMapping
     public List<UserResponse> getAllUsers() {
         return userService.getAllUsers().stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+            .map(this::convertToResponse)
+            .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
-                .map(this::convertToResponse)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+            .map(this::convertToResponse)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public UserResponse addUser(@RequestBody @Valid UserRequest userRequest) {
-       User user =  userService.addUser(convertUser(userRequest));
+        User user = userService.addUser(convertUser(userRequest));
         return convertToResponse(user);
     }
 

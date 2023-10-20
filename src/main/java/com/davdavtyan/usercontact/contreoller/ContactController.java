@@ -1,5 +1,9 @@
 package com.davdavtyan.usercontact.contreoller;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
 import com.davdavtyan.usercontact.dto.ContactType;
 import com.davdavtyan.usercontact.dto.request.ContactRequest;
 import com.davdavtyan.usercontact.dto.response.ContactResponse;
@@ -8,11 +12,13 @@ import com.davdavtyan.usercontact.service.ContactService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users/{userId}/contacts")
@@ -29,12 +35,12 @@ public class ContactController {
     public List<ContactResponse> getContactsByUserIdAndType(@PathVariable Long userId,
                                                             @RequestParam(required = false) ContactType type) {
         List<Contact> contacts = type == null
-                ? contactService.getContactsByUserId(userId)
-                : contactService.getContactsByUserIdAndType(userId, type);
+            ? contactService.getContactsByUserId(userId)
+            : contactService.getContactsByUserIdAndType(userId, type);
 
         return contacts.stream()
-                .map(this::convertToContactResponse)
-                .collect(Collectors.toList());
+            .map(this::convertToContactResponse)
+            .collect(Collectors.toList());
     }
 
     @PostMapping
