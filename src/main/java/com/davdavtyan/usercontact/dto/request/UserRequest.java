@@ -1,16 +1,9 @@
 package com.davdavtyan.usercontact.dto.request;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class UserRequest {
-
-    private String name;
-    private List<ContactRequest> contacts;
+public record UserRequest(@NotNull String name, @Valid List<ContactRequest> contacts) {
 }

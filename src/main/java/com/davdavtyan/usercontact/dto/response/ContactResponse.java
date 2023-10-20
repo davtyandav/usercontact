@@ -5,12 +5,5 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class ContactResponse {
-
-    private Long id;
-    private String name;
-    private ContactType contactType;
+public record ContactResponse(Long id,  ContactType contactType, String value) {
 }

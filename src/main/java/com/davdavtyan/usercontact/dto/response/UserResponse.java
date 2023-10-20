@@ -6,12 +6,5 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class UserResponse {
-
-    private Long id;
-    private String name;
-    private List<ContactResponse> contacts;
+public record UserResponse(Long id, String name, List<ContactResponse> contacts) {
 }

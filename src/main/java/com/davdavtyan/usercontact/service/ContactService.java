@@ -12,6 +12,6 @@ public interface ContactService {
 
     List<Contact> getContactsByUserId(Long userId);
 
-    Contact addContactByUser(Long userId, Contact contact);
+    Contact addContactToUser(Long userId, Contact contact);
 }
 

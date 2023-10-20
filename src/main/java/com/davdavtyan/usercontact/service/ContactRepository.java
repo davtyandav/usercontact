@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {
-    @Query("SELECT c FROM Contact c WHERE c.user.id = :userId")
-    List<Contact> findByUserId(@Param("userId") Long userId);
-    @Query("SELECT c FROM Contact c WHERE c.user.id = :userId and c.contactType=:type")
-    List<Contact> getContactsByUserAndContactType(Long userId, ContactType type);
+   List<Contact> findByUserId(Long userId);
+    List<Contact> findContactsByUserIdAndContactType(Long userId, ContactType type);
 }

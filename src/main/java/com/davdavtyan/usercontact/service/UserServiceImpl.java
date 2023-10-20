@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
             contact.setUser(savedUser);
         }
         contactRepository.saveAll(savedUser.getContacts());
-        return user;
+        return savedUser;
     }
 
     @Override

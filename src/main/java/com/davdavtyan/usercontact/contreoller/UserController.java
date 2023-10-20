@@ -1,10 +1,8 @@
 package com.davdavtyan.usercontact.contreoller;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.davdavtyan.usercontact.dto.ValidationDto;
 import com.davdavtyan.usercontact.dto.request.ContactRequest;
 import com.davdavtyan.usercontact.dto.request.UserRequest;
 import com.davdavtyan.usercontact.dto.response.ContactResponse;
@@ -12,10 +10,9 @@ import com.davdavtyan.usercontact.dto.response.UserResponse;
 import com.davdavtyan.usercontact.entity.Contact;
 import com.davdavtyan.usercontact.entity.User;
 import com.davdavtyan.usercontact.service.UserService;
-import com.davdavtyan.usercontact.util.ValidationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,75 +21,60 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Validated
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> users = userService.getAllUsers().stream()
-                .map(this::convertByResponse).collect(Collectors.toList());
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<?> addUser(@RequestBody UserRequest userRequest) {
-        ValidationDto validationDto = ValidationUtil.validateContacts(userRequest.getContacts());
-
-        if (validationDto.isValid()) {
-            User user = convertByUser(userRequest);
-            UserResponse userResponse = convertByResponse(userService.addUser(user));
-            return ResponseEntity.ok(userResponse);
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(validationDto.getMessage());
-        }
+    public List<UserResponse> getAllUsers() {
+        return userService.getAllUsers().stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
-                .map(this::convertByResponse)
-                .map(userResponse -> new ResponseEntity<>(userResponse, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .map(this::convertToResponse)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    private UserResponse convertByResponse(User user) {
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
-        userResponse.setContacts(getContacts(user));
-        return userResponse;
+    @PostMapping
+    public UserResponse addUser(@RequestBody @Valid UserRequest userRequest) {
+       User user =  userService.addUser(convertUser(userRequest));
+        return convertToResponse(user);
     }
 
-    private List<ContactResponse> getContacts(User user) {
-        return user.getContacts().stream().map(this::convertByContactResponse).collect(Collectors.toList());
+    private UserResponse convertToResponse(User user) {
+        return new UserResponse(user.getId(), user.getName(), convertContacts(user.getContacts()));
     }
 
-    private User convertByUser(UserRequest userrequest) {
+    private List<ContactResponse> convertContacts(List<Contact> contacts) {
+        return contacts.stream().map(this::convertByContactResponse).collect(Collectors.toList());
+    }
+
+    private User convertUser(UserRequest userRequest) {
         User user = new User();
-        user.setName(userrequest.getName());
-        user.setContacts(userrequest.getContacts().stream().map(this::convertByContact).collect(Collectors.toList()));
+        user.setName(userRequest.name());
+        user.setContacts(userRequest.contacts().stream().map(this::convertContact).collect(Collectors.toList()));
         return user;
     }
 
-    private Contact convertByContact(ContactRequest contactRequest) {
+    private Contact convertContact(ContactRequest contactRequest) {
         Contact contact = new Contact();
-        contact.setName(contactRequest.getName());
-        contact.setContactType(contactRequest.getContactType());
+        contact.setValue(contactRequest.value());
+        contact.setContactType(contactRequest.contactType());
         return contact;
     }
 
     private ContactResponse convertByContactResponse(Contact contact) {
-        ContactResponse contactResponse = new ContactResponse();
-        contactResponse.setId(contact.getId());
-        contactResponse.setContactType(contact.getContactType());
-        contactResponse.setName(contact.getName());
-        return contactResponse;
+        return new ContactResponse(contact.getId(), contact.getContactType(), contact.getValue());
     }
 }

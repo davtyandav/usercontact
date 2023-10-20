@@ -1,74 +1,65 @@
 package com.davdavtyan.usercontact.contreoller;
 
 import com.davdavtyan.usercontact.dto.ContactType;
-import com.davdavtyan.usercontact.dto.ValidationDto;
 import com.davdavtyan.usercontact.dto.request.ContactRequest;
 import com.davdavtyan.usercontact.dto.response.ContactResponse;
 import com.davdavtyan.usercontact.entity.Contact;
 import com.davdavtyan.usercontact.service.ContactService;
-import com.davdavtyan.usercontact.util.ValidationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/contacts")
+@RequestMapping("/users/{userId}/contacts")
+@Validated
 public class ContactController {
+
     private final ContactService contactService;
 
-    @Autowired
     public ContactController(ContactService contactService) {
         this.contactService = contactService;
     }
 
-    @GetMapping("/user/{userId}/type/{type}")
-    public ResponseEntity<List<ContactResponse>> getContactsByUserIdAndType(@PathVariable Long userId,
-                                                                            @PathVariable ContactType type) {
-        List<ContactResponse> contacts =
-                contactService.getContactsByUserIdAndType(userId, type).stream().map(this::convertByContactResponse)
-                        .collect(Collectors.toList());
-        return new ResponseEntity<>(contacts, HttpStatus.OK);
+    @GetMapping
+    public List<ContactResponse> getContactsByUserIdAndType(@PathVariable Long userId,
+                                                            @RequestParam(required = false) ContactType type) {
+        List<Contact> contacts = type == null
+                ? contactService.getContactsByUserId(userId)
+                : contactService.getContactsByUserIdAndType(userId, type);
+
+        return contacts.stream()
+                .map(this::convertToContactResponse)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ContactResponse>> getContactsByUserId(@PathVariable Long userId) {
-        List<ContactResponse> contacts =
-                contactService.getContactsByUserId(userId).stream().map(this::convertByContactResponse)
-                        .collect(Collectors.toList());
-        return new ResponseEntity<>(contacts, HttpStatus.OK);
-    }
-
-    @PostMapping("/user/{userId}")
+    @PostMapping
     public ResponseEntity<?> addContact(@PathVariable Long userId,
-                                        @RequestBody ContactRequest contactRequest) {
+                                        @RequestBody @Valid ContactRequest contactRequest) {
+        Contact contact = convertToContact(contactRequest);
 
-        ValidationDto validationDto = ValidationUtil.contactIsValid(contactRequest);
-        if (validationDto.isValid()) {
-            Contact contact = convertByContact(contactRequest);
-            ContactResponse contactResponse = convertByContactResponse(contactService.addContactByUser(userId, contact));
-            return new ResponseEntity<>(contactResponse, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(validationDto.getMessage(), HttpStatus.FORBIDDEN);
+        Contact savedContact;
+        try {
+            savedContact = contactService.addContactToUser(userId, contact);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
+
+        return ResponseEntity.ok(convertToContactResponse(savedContact));
     }
 
-
-    private Contact convertByContact(ContactRequest contactRequest) {
+    private Contact convertToContact(ContactRequest contactRequest) {
         Contact contact = new Contact();
-        contact.setContactType(contactRequest.getContactType());
-        contact.setName(contactRequest.getName());
+        contact.setContactType(contactRequest.contactType());
+        contact.setValue(contactRequest.value());
         return contact;
     }
 
-    private ContactResponse convertByContactResponse(Contact contact) {
-        ContactResponse contactResponse = new ContactResponse();
-        contactResponse.setId(contact.getId());
-        contactResponse.setContactType(contact.getContactType());
-        contactResponse.setName(contact.getName());
-        return contactResponse;
+    private ContactResponse convertToContactResponse(Contact contact) {
+        return new ContactResponse(contact.getId(), contact.getContactType(), contact.getValue());
     }
 }
